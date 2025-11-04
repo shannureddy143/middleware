@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Middleware Demo (Logging & Auth)</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: white;
+      padding: 20px 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    button {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    .log {
+      margin-top: 15px;
+      color: green;
+      font-size: 14px;
+    }
+
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>🔐 Middleware Simulation</h2>
+    <p>Click below to access the Dashboard</p>
+    <button onclick="accessDashboard()">Access Dashboard</button>
+    <div id="output" class="log"></div>
+  </div>
+
+  <script>
+    // Middleware simulation functions
+
+    // 1️⃣ Logging middleware
+    function loggerMiddleware(action) {
+      const logMsg = `[LOG] User tried to perform: ${action} at ${new Date().toLocaleTimeString()}`;
+      console.log(logMsg);
+      document.getElementById('output').innerText = logMsg;
+    }
+
+    // 2️⃣ Authentication middleware
+    function authMiddleware(token) {
+      const validToken = "mysecrettoken";
+      if (token === validToken) {
+        return true;
+      } else {
+        document.getElementById('output').innerHTML = "❌ Access Denied: Invalid Token!";
+        document.getElementById('output').classList.add('error');
+        return false;
+      }
+    }
+
+    // 3️⃣ Main action - accessing dashboard
+    function accessDashboard() {
+      loggerMiddleware("Access Dashboard");
+
+      // Simulate user token input (in real app, it would come from login)
+      const userToken = prompt("Enter your token to continue:");
+
+      // Run through authentication middleware
+      if (authMiddleware(userToken)) {
+        document.getElementById('output').innerHTML = "✅ Access Granted! Welcome to Dashboard.";
+        document.getElementById('output').classList.remove('error');
+      }
+    }
+  </script>
+</body>
+</html>
